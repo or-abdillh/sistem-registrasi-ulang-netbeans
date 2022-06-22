@@ -9,6 +9,9 @@ package sistemRegistrasiUlang;
 
 import sistemRegistrasiUlang.UserPanel.MainForm;
 
+import sistemRegistrasiUlang.Connection;
+
+
 // import sistemRegistrasiUlang.UserPanel.*;
 
 /**
@@ -25,7 +28,9 @@ public class SistemRegistrasiUlang {
         sistemRegistrasiUlang.UserPanel.MainForm userPanel = new sistemRegistrasiUlang.UserPanel.MainForm();
         sistemRegistrasiUlang.Home.MainForm homePanel = new sistemRegistrasiUlang.Home.MainForm();
         
+        //AdminPanel.setVisible(true);
         homePanel.setVisible(true);
+        Connection.getConnection();
     }
     
 }

@@ -33,8 +33,8 @@ public class MainForm extends javax.swing.JFrame {
         mainTable.getColumnModel().getColumn(5).setPreferredWidth(180); // Registrasi
         
         // Table scroll
-        JScrollPane pane = new JScrollPane(mainTable);
-        this.add(pane, BorderLayout.CENTER);
+//        JScrollPane pane = new JScrollPane(mainTable);
+//        this.add(pane, BorderLayout.CENTER);
     }
 
     /**
