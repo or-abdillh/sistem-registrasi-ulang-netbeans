@@ -9,7 +9,9 @@ package sistemRegistrasiUlang;
 
 import sistemRegistrasiUlang.UserPanel.MainForm;
 
-import sistemRegistrasiUlang.Connection;
+import Helpers.Connect;
+import java.sql.Connection;
+import java.sql.Statement;
 
 
 // import sistemRegistrasiUlang.UserPanel.*;
@@ -23,14 +25,14 @@ public class SistemRegistrasiUlang {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         // TODO code application logic here
         sistemRegistrasiUlang.UserPanel.MainForm userPanel = new sistemRegistrasiUlang.UserPanel.MainForm();
         sistemRegistrasiUlang.Home.MainForm homePanel = new sistemRegistrasiUlang.Home.MainForm();
         
         //AdminPanel.setVisible(true);
         homePanel.setVisible(true);
-        Connection.getConnection();
+        Connection conn = Connect.getConnection();
     }
     
 }

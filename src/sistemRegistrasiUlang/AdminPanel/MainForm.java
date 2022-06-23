@@ -5,7 +5,14 @@
  */
 package sistemRegistrasiUlang.AdminPanel;
 
+import Helpers.Connect;
+import Helpers.ShowDialog;
 import java.awt.BorderLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sistemRegistrasiUlang.UserPanel.*;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -23,14 +30,15 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Sistem Registrasi Ulang - Administarator");
         this.getContentPane().setBackground(new java.awt.Color(4, 28, 50));
-        
-        // Resize width column
-        mainTable.getColumnModel().getColumn(0).setPreferredWidth(40); // No
-        mainTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Nama
-        mainTable.getColumnModel().getColumn(2).setPreferredWidth(200); // Prodi
-        mainTable.getColumnModel().getColumn(3).setPreferredWidth(100); // NIM
-        mainTable.getColumnModel().getColumn(4).setPreferredWidth(180); // Pembayaran
-        mainTable.getColumnModel().getColumn(5).setPreferredWidth(180); // Registrasi
+        // Show all record    
+        Helpers.RenderAllRecord.show(mainTable);
+        // Scroll Table
+        JScrollPane scrollPane = new JScrollPane(mainTable);
+        // Force the scrollbars to always be displayed
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+        // Enable background button
+        SubmitButton.setOpaque(true);
     }
 
     /**
@@ -46,14 +54,12 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        name = new javax.swing.JTextField();
+        fieldName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        nim = new javax.swing.JTextField();
+        fieldNIM = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        study = new javax.swing.JComboBox();
+        optionsStudy = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -70,10 +76,11 @@ public class MainForm extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        paymentStatus1 = new javax.swing.JComboBox();
+        optionsPaymentStatus = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        SubmitButton = new javax.swing.JButton();
 
         jLabel15.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(203, 203, 203));
@@ -93,23 +100,23 @@ public class MainForm extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(203, 203, 203));
         jLabel2.setText("Kelola status dan data akademik disini");
 
-        name.setBackground(new java.awt.Color(8, 32, 50));
-        name.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        name.setForeground(new java.awt.Color(255, 255, 255));
-        name.setText("Nama");
-        name.setToolTipText("Masukkan Nama Anda");
-        name.setBorder(null);
-        name.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        name.setMargin(new java.awt.Insets(8, 8, 8, 8));
-        name.setMinimumSize(new java.awt.Dimension(85, 32));
-        name.addActionListener(new java.awt.event.ActionListener() {
+        fieldName.setBackground(new java.awt.Color(8, 32, 50));
+        fieldName.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        fieldName.setForeground(new java.awt.Color(255, 255, 255));
+        fieldName.setText("Nama");
+        fieldName.setToolTipText("Masukkan Nama Anda");
+        fieldName.setBorder(null);
+        fieldName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        fieldName.setMargin(new java.awt.Insets(8, 8, 8, 8));
+        fieldName.setMinimumSize(new java.awt.Dimension(85, 32));
+        fieldName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameActionPerformed(evt);
+                fieldNameActionPerformed(evt);
             }
         });
-        name.addKeyListener(new java.awt.event.KeyAdapter() {
+        fieldName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                nameKeyTyped(evt);
+                fieldNameKeyTyped(evt);
             }
         });
 
@@ -124,23 +131,23 @@ public class MainForm extends javax.swing.JFrame {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        nim.setBackground(new java.awt.Color(8, 32, 50));
-        nim.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        nim.setForeground(new java.awt.Color(255, 255, 255));
-        nim.setText("NIM");
-        nim.setToolTipText("Masukkan NIM anda");
-        nim.setBorder(null);
-        nim.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        nim.setMargin(new java.awt.Insets(8, 8, 8, 8));
-        nim.setMinimumSize(new java.awt.Dimension(85, 32));
-        nim.addActionListener(new java.awt.event.ActionListener() {
+        fieldNIM.setBackground(new java.awt.Color(8, 32, 50));
+        fieldNIM.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        fieldNIM.setForeground(new java.awt.Color(255, 255, 255));
+        fieldNIM.setText("NIM");
+        fieldNIM.setToolTipText("Masukkan NIM anda");
+        fieldNIM.setBorder(null);
+        fieldNIM.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        fieldNIM.setMargin(new java.awt.Insets(8, 8, 8, 8));
+        fieldNIM.setMinimumSize(new java.awt.Dimension(85, 32));
+        fieldNIM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nimActionPerformed(evt);
+                fieldNIMActionPerformed(evt);
             }
         });
-        nim.addKeyListener(new java.awt.event.KeyAdapter() {
+        fieldNIM.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                nimKeyTyped(evt);
+                fieldNIMKeyTyped(evt);
             }
         });
 
@@ -155,43 +162,20 @@ public class MainForm extends javax.swing.JFrame {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        study.setBackground(new java.awt.Color(8, 32, 50));
-        study.setFont(new java.awt.Font("Poppins Light", 0, 14)); // NOI18N
-        study.setForeground(new java.awt.Color(8, 32, 50));
-        study.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "D3 - Teknik Informatika", "D3 - Budidaya Tanaman Perkebunan", "D3 - Teknik Otomotif", "D4 - Bisnis Digital" }));
-        study.setToolTipText("Silahkan Pilih Prodi Anda");
-        study.addActionListener(new java.awt.event.ActionListener() {
+        optionsStudy.setBackground(new java.awt.Color(8, 32, 50));
+        optionsStudy.setFont(new java.awt.Font("Poppins Light", 0, 14)); // NOI18N
+        optionsStudy.setForeground(new java.awt.Color(8, 32, 50));
+        optionsStudy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "D3 - Teknik Informatika", "D3 - Budidaya Tanaman Perkebunan", "D3 - Teknik Otomotif", "D4 - Bisnis Digital" }));
+        optionsStudy.setToolTipText("Silahkan Pilih Prodi Anda");
+        optionsStudy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                studyActionPerformed(evt);
+                optionsStudyActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Program Studi");
-
-        jPanel4.setBackground(new java.awt.Color(78, 14, 236));
-
-        jLabel4.setFont(new java.awt.Font("Poppins Medium", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Submit");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(jLabel4)
-                .addContainerGap(57, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(20, 20, 20))
-        );
 
         jLabel5.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(203, 203, 203));
@@ -237,27 +221,18 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         mainTable.setBackground(new java.awt.Color(0, 51, 51));
-        mainTable.setFont(new java.awt.Font("Poppins Light", 0, 11)); // NOI18N
+        mainTable.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         mainTable.setForeground(new java.awt.Color(255, 255, 255));
         mainTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1", "Emma", "D3 - Teknik Otomotif", "20405040", "Belum Lunas", "Belum Registrasi"},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {},
+                {},
+                {}
             },
             new String [] {
-                "No", "Nama", "Prodi", "NIM", "Pembayaran", "Registrasi"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
+        ));
         mainTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         mainTable.setCellSelectionEnabled(true);
         mainTable.setGridColor(new java.awt.Color(255, 255, 255));
@@ -338,14 +313,14 @@ public class MainForm extends javax.swing.JFrame {
         jLabel12.setForeground(new java.awt.Color(203, 203, 203));
         jLabel12.setText("Sistem Registrasi Ulang - Pemrograman Visual 2022");
 
-        paymentStatus1.setBackground(new java.awt.Color(8, 32, 50));
-        paymentStatus1.setFont(new java.awt.Font("Poppins Light", 0, 14)); // NOI18N
-        paymentStatus1.setForeground(new java.awt.Color(8, 32, 50));
-        paymentStatus1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-- Status Pembayaran", "Sudah Lunas", "Belum Lunas", " " }));
-        paymentStatus1.setToolTipText("Silahkan Pilih Status Pembayaran");
-        paymentStatus1.addActionListener(new java.awt.event.ActionListener() {
+        optionsPaymentStatus.setBackground(new java.awt.Color(8, 32, 50));
+        optionsPaymentStatus.setFont(new java.awt.Font("Poppins Light", 0, 14)); // NOI18N
+        optionsPaymentStatus.setForeground(new java.awt.Color(8, 32, 50));
+        optionsPaymentStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-- Status Pembayaran", "Sudah Lunas", "Belum Lunas", " " }));
+        optionsPaymentStatus.setToolTipText("Silahkan Pilih Status Pembayaran");
+        optionsPaymentStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                paymentStatus1ActionPerformed(evt);
+                optionsPaymentStatusActionPerformed(evt);
             }
         });
 
@@ -380,6 +355,16 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(54, 54, 54))
         );
 
+        SubmitButton.setBackground(new java.awt.Color(78, 14, 236));
+        SubmitButton.setFont(new java.awt.Font("Poppins Medium", 0, 18)); // NOI18N
+        SubmitButton.setForeground(new java.awt.Color(255, 255, 255));
+        SubmitButton.setText("Submit");
+        SubmitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubmitButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -396,25 +381,25 @@ public class MainForm extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel3)
-                                        .addComponent(study, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(optionsStudy, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel6)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(26, 26, 26)
                                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jLabel1)
                                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(fieldName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(nim, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                                            .addComponent(fieldNIM, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addGap(54, 54, 54))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(paymentStatus1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(optionsPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -453,13 +438,13 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(nim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(fieldNIM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(22, 22, 22))
@@ -475,18 +460,18 @@ public class MainForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(26, 26, 26)
-                                .addComponent(study, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(optionsStudy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(26, 26, 26)
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addComponent(paymentStatus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addComponent(optionsPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(SubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -497,7 +482,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel12)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -516,26 +501,26 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameActionPerformed
+    private void fieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameActionPerformed
+    }//GEN-LAST:event_fieldNameActionPerformed
 
-    private void nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameKeyTyped
+    private void fieldNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNameKeyTyped
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_nameKeyTyped
+    }//GEN-LAST:event_fieldNameKeyTyped
 
-    private void nimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nimActionPerformed
+    private void fieldNIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNIMActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nimActionPerformed
+    }//GEN-LAST:event_fieldNIMActionPerformed
 
-    private void nimKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nimKeyTyped
+    private void fieldNIMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNIMKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_nimKeyTyped
+    }//GEN-LAST:event_fieldNIMKeyTyped
 
-    private void studyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studyActionPerformed
+    private void optionsStudyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsStudyActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_studyActionPerformed
+    }//GEN-LAST:event_optionsStudyActionPerformed
 
     private void paymentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentStatusActionPerformed
         // TODO add your handling code here:
@@ -549,10 +534,32 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nim1KeyTyped
 
-    private void paymentStatus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentStatus1ActionPerformed
+    private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_paymentStatus1ActionPerformed
+        Connection conn = Connect.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("insert into mahasiswa(nim, nama, program_studi, status_pembayaran) values(?,?,?,?)");
+            stmt.setString(1, fieldNIM.getText());
+            stmt.setString(2, fieldName.getText());
+            stmt.setString(3, optionsStudy.getSelectedItem().toString());
+            stmt.setBoolean(4, 
+                    optionsPaymentStatus.getSelectedItem().toString().equals("Sudah Lunas") ? true : false
+                );
+            // Querying
+            stmt.executeUpdate();
+            // Show all records
+            Helpers.RenderAllRecord.show(mainTable);
+            ShowDialog.createDialog("Insert Data Success", this);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_SubmitButtonActionPerformed
 
+    private void optionsPaymentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsPaymentStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_optionsPaymentStatusActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -590,6 +597,9 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton SubmitButton;
+    private javax.swing.JTextField fieldNIM;
+    private javax.swing.JTextField fieldName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -600,7 +610,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -609,18 +618,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable mainTable;
-    private javax.swing.JTextField name;
-    private javax.swing.JTextField nim;
     private javax.swing.JTextField nim1;
+    private javax.swing.JComboBox optionsPaymentStatus;
+    private javax.swing.JComboBox optionsStudy;
     private javax.swing.JComboBox paymentStatus;
-    private javax.swing.JComboBox paymentStatus1;
-    private javax.swing.JComboBox study;
     // End of variables declaration//GEN-END:variables
 }

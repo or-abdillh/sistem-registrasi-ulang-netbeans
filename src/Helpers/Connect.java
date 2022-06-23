@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Config;
+package Helpers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,28 +17,22 @@ import javax.swing.JOptionPane;
  * @author hp
  */
 public class Connect {
-    public static Connection getConnection() throws ClassNotFoundException {
+    public static Connection getConnection() {
         
         // Frame
         JFrame connectFrame = new JFrame();
-        
         
         Connection conn = null;
         String url = "jdbc:mysql://localhost:3306/registrasi_ulang";
         String user="root";
         String password="";
-        Class.forName("com.mysql.jdbc.Driver");
+        //Class.forName("com.mysql.jdbc.Driver");
         
         try {
             conn = (Connection) DriverManager.getConnection(url, user, password);
-            JOptionPane.showMessageDialog(connectFrame, "Connection Success");
         } catch (SQLException e){    
             JOptionPane.showMessageDialog(connectFrame, "Connection Error \n " + e.getMessage());
         }
         return conn;
-    }
-    
-    public static void main (String[] args) throws ClassNotFoundException {
-        Statement statement = (Statement) Connect.getConnection();
     }
 }
