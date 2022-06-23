@@ -23,7 +23,7 @@ public class Connect {
         JFrame connectFrame = new JFrame();
         
         Connection conn = null;
-        String url = "jdbc:mysql://localhost:3306/registrasi_ulang";
+        String url = "jdbc:mysql://localhost:3306/sistem_registrasi_ulang";
         String user="root";
         String password="";
         //Class.forName("com.mysql.jdbc.Driver");
