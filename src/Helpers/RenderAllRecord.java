@@ -71,17 +71,28 @@ public class RenderAllRecord {
         }
     }
     
-    public static void createStatsMahsiswa (JTextField countMahasiswa, JTextField countPaymentStatus, JTextField countPaymentStatusFalse) {
+    public static void createStatsMahsiswa (JTextField countMahasiswa, JTextField countRegistStatusTrue, JTextField countRegistStatusFalse) {
     
         Connection conn = Connect.getConnection();
         
+        // COunt mahasiswa
+        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa", conn, countMahasiswa);
+        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 1", conn, countRegistStatusTrue);
+        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 0", conn, countRegistStatusFalse);
+    }
+    
+    private static void getCountQuery (String SQL, Connection conn, JTextField field) {
         try {
             Statement stmt = conn.createStatement();
-            String SQL = "SELECT COUNT(status_registrasi) FROM mahasiswa WHERE status_registrasi = 0";
             ResultSet results = stmt.executeQuery(SQL);
-            
-        } catch (SQLException e) {
-        
+            if ( results.next() ) {
+                int count = results.getInt(1);
+                field.setText(count + "");
+            } else {
+                field.setText("00");
+            }
+        } catch( SQLException e ) {
+            Helpers.ShowDialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
         }
     }
 }
