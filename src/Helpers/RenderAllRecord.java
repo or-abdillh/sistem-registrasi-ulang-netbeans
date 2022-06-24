@@ -6,9 +6,12 @@
 package Helpers;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -65,6 +68,20 @@ public class RenderAllRecord {
             }
         } catch( SQLException  e ) {
             Helpers.ShowDialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
+        }
+    }
+    
+    public static void createStatsMahsiswa (JTextField countMahasiswa, JTextField countPaymentStatus, JTextField countPaymentStatusFalse) {
+    
+        Connection conn = Connect.getConnection();
+        
+        try {
+            Statement stmt = conn.createStatement();
+            String SQL = "SELECT COUNT(status_registrasi) FROM mahasiswa WHERE status_registrasi = 0";
+            ResultSet results = stmt.executeQuery(SQL);
+            
+        } catch (SQLException e) {
+        
         }
     }
 }
