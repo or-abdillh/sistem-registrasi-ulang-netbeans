@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author hp
  */
-public class Connect {
+public class DB {
     public static Connection getConnection() {
         
         // Frame

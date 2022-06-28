@@ -9,7 +9,7 @@ package Panel;
 
 import Panel.UserPanel.MainForm;
 
-import Helpers.Connect;
+import Helpers.DB;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -22,7 +22,7 @@ import java.sql.Statement;
  */
 public class Main {
 
-    /**
+    /**  
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException {
@@ -31,7 +31,7 @@ public class Main {
         
         //AdminPanel.setVisible(true);
         homePanel.setVisible(true);
-        Connection conn = Connect.getConnection();
+        Connection conn = DB.getConnection();
     }
     
 }

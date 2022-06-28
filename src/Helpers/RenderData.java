@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author hp
  */
-public class RenderAllRecord {
+public class RenderData {
     public static void show (JTable table) {
         // Create model
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -34,7 +34,7 @@ public class RenderAllRecord {
         // Remove all row
         tableModel.setNumRows(0);
         
-        Connection conn = Helpers.Connect.getConnection();
+        Connection conn = Helpers.DB.getConnection();
         try {
             java.sql.Statement stmt = conn.createStatement();
             String SQL = "SELECT * FROM mahasiswa";
@@ -47,13 +47,13 @@ public class RenderAllRecord {
                     results.getString("nim"),
                     results.getString("nama"),
                     results.getString("program_studi"),
-                    Helpers.ConvertToArgument.booleanSample(
+                    Helpers.ConvertArgument.booleanSample(
                         results.getBoolean("status_pembayaran"), "Lunas", "Belum Lunas"
                     ),
-                    Helpers.ConvertToArgument.booleanSample(
+                    Helpers.ConvertArgument.booleanSample(
                         results.getBoolean("status_registrasi"), "Sudah", "Belum"
                     ),
-                    Helpers.ConvertToArgument.nullSample(
+                    Helpers.ConvertArgument.nullSample(
                         results.getString("semester_register"), "Tidak ada data"
                     ),
                 });
@@ -67,18 +67,19 @@ public class RenderAllRecord {
                 table.getColumnModel().getColumn(6).setPreferredWidth(180); // Semester
             }
         } catch( SQLException  e ) {
-            Helpers.ShowDialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
+            Helpers.Dialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
         }
     }
     
-    public static void createStatsMahsiswa (JTextField countMahasiswa, JTextField countRegistStatusTrue, JTextField countRegistStatusFalse) {
+    public static void createStatsMahsiswa (JTextField countMahasiswa, JTextField countRegistStatusTrue, JTextField countRegistStatusFalse, JTextField countPaymentStatusTrue) {
     
-        Connection conn = Connect.getConnection();
+        Connection conn = DB.getConnection();
         
         // COunt mahasiswa
-        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa", conn, countMahasiswa);
-        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 1", conn, countRegistStatusTrue);
-        RenderAllRecord.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 0", conn, countRegistStatusFalse);
+        RenderData.getCountQuery("SELECT COUNT(nim) FROM mahasiswa", conn, countMahasiswa);
+        RenderData.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 1", conn, countRegistStatusTrue);
+        RenderData.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_registrasi = 0", conn, countRegistStatusFalse);
+        RenderData.getCountQuery("SELECT COUNT(nim) FROM mahasiswa WHERE status_pembayaran = 1", conn, countPaymentStatusTrue);
     }
     
     private static void getCountQuery (String SQL, Connection conn, JTextField field) {
@@ -87,12 +88,12 @@ public class RenderAllRecord {
             ResultSet results = stmt.executeQuery(SQL);
             if ( results.next() ) {
                 int count = results.getInt(1);
-                field.setText(count + "");
+                field.setText("0" + count);
             } else {
                 field.setText("00");
             }
         } catch( SQLException e ) {
-            Helpers.ShowDialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
+            Helpers.Dialog.createDialog("Error : \n" + e.getMessage(), new JFrame());
         }
     }
 }

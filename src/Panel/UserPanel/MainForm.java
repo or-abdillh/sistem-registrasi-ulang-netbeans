@@ -298,19 +298,19 @@ public class MainForm extends javax.swing.JFrame {
 
     private void RegistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistButtonActionPerformed
         // TODO add your handling code here:
-        Connection conn = Helpers.Connect.getConnection();
+        Connection conn = Helpers.DB.getConnection();
         try {
             PreparedStatement stmt = conn.prepareStatement("UPDATE mahasiswa SET status_registrasi = 1, semester_register = ? WHERE nim = ?");
             stmt.setString(1, semesterOptions.getSelectedItem().toString());
             stmt.setString(2, NIMField.getText());
-            if ( this.ValidateUser() ) {
+            if ( this.validatePayment() && this.ValidateUser() ) {
                 stmt.executeUpdate();
-                Helpers.ShowDialog.createDialog("Registration Successfull, Thanks", this);
-            } else {
-                Helpers.ShowDialog.createDialog("NIM or Username not found", this);
-            }            
+                Helpers.Dialog.createDialog("Registration Successfull, Thanks", this);
+                // Render report
+                int renderReport = Helpers.Dialog.createConfirm("Print registration card now ?", this);
+            }         
         } catch( SQLException ex ) {
-            Helpers.ShowDialog.createDialog("Error : \n " + ex.getMessage(), this);
+            Helpers.Dialog.createDialog("Error : \n " + ex.getMessage(), this);
         }
     }//GEN-LAST:event_RegistButtonActionPerformed
 
@@ -318,21 +318,41 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_HomeButtonActionPerformed
+    private boolean validatePayment() {
+        Connection conn = Helpers.DB.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT nim FROM mahasiswa WHERE nim = ? AND status_pembayaran = 1");
+            stmt.setString(1, NIMField.getText());
+            ResultSet results = stmt.executeQuery();
+            // Payment done
+            if ( results.next() ) { 
+                return true; 
+            } else {
+                Helpers.Dialog.createDialog("Operation failed, pay off your payment first", this);
+            }
+        } catch( SQLException ex ) {
+            Helpers.Dialog.createDialog(ex.getMessage(), this);
+        } 
+        return false;
+    }
     
     private boolean ValidateUser () {
         // Check NIM if exist
-        Connection conn = Helpers.Connect.getConnection();
+        Connection conn = Helpers.DB.getConnection();
         try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM mahasiswa WHERE nim = ? AND nama = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM mahasiswa WHERE nim = ? AND nama = ? AND program_studi = ?");
             stmt.setString(1, NIMField.getText());
             stmt.setString(2, NameField.getText());
+            stmt.setString(3, StudyOptions.getSelectedItem().toString());
             ResultSet results = stmt.executeQuery();
             // User Exist
             if ( results.next() ) {
                 return true;
+            } else {
+                Helpers.Dialog.createDialog("Your Data not found, NIM or Username was wrong", this);
             }
         } catch( SQLException ex ) {
-            Helpers.ShowDialog.createDialog(ex.getMessage(), this);
+            Helpers.Dialog.createDialog(ex.getMessage(), this);
         }
         return false;
     }

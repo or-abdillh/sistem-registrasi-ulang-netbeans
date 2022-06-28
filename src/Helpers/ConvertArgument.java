@@ -9,7 +9,7 @@ package Helpers;
  *
  * @author hp
  */
-public class ConvertToArgument {
+public class ConvertArgument {
     public static String booleanSample (Boolean source, String firstArg, String secondArg) {
         // args[] = ["Lunas", "Belum Lunas"]
         if ( source ) {

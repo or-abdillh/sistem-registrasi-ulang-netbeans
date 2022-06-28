@@ -12,8 +12,14 @@ import javax.swing.JOptionPane;
  *
  * @author hp
  */
-public class ShowDialog {
+public class Dialog {
     public static void createDialog(String message, JFrame frame) {
         JOptionPane.showMessageDialog(frame, message);
+    }
+    
+    public static int createConfirm(String message, JFrame frame) {
+        int input = JOptionPane.showConfirmDialog(frame, message);
+        
+        return input;
     }
 }

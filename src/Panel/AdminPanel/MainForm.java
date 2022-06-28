@@ -5,8 +5,8 @@
  */
 package Panel.AdminPanel;
 
-import Helpers.Connect;
-import Helpers.ShowDialog;
+import Helpers.DB;
+import Helpers.Dialog;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.sql.Connection;
@@ -32,8 +32,8 @@ public class MainForm extends javax.swing.JFrame {
         this.getContentPane().setBackground(new java.awt.Color(4, 28, 50));
         
         // Show all record    
-        Helpers.RenderAllRecord.show(mainTable);
-        Helpers.RenderAllRecord.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse);
+        Helpers.RenderData.show(mainTable);
+        Helpers.RenderData.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse, countPaymentStatusTrue);
         
         // Scroll Table
         mainTable.setPreferredScrollableViewportSize(mainTable.getPreferredSize());
@@ -97,6 +97,8 @@ public class MainForm extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         HomeButton = new javax.swing.JButton();
         RefreshButton = new javax.swing.JButton();
+        countPaymentStatusTrue = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
 
         jLabel15.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(203, 203, 203));
@@ -258,7 +260,7 @@ public class MainForm extends javax.swing.JFrame {
         updatePaymentNIM.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         updatePaymentNIM.setForeground(new java.awt.Color(255, 255, 255));
         updatePaymentNIM.setText("NIM");
-        updatePaymentNIM.setToolTipText("Masukkan NIM anda");
+        updatePaymentNIM.setToolTipText("Pilih NIM melalui tabel");
         updatePaymentNIM.setBorder(null);
         updatePaymentNIM.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         updatePaymentNIM.setMargin(new java.awt.Insets(8, 8, 8, 8));
@@ -427,6 +429,11 @@ public class MainForm extends javax.swing.JFrame {
         countRegistStatusFalse.setForeground(new java.awt.Color(255, 255, 255));
         countRegistStatusFalse.setText("23");
         countRegistStatusFalse.setBorder(null);
+        countRegistStatusFalse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                countRegistStatusFalseActionPerformed(evt);
+            }
+        });
 
         jLabel18.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(203, 203, 203));
@@ -461,6 +468,17 @@ public class MainForm extends javax.swing.JFrame {
                 RefreshButtonActionPerformed(evt);
             }
         });
+
+        countPaymentStatusTrue.setEditable(false);
+        countPaymentStatusTrue.setBackground(new java.awt.Color(4, 28, 50));
+        countPaymentStatusTrue.setFont(new java.awt.Font("Poppins Medium", 0, 48)); // NOI18N
+        countPaymentStatusTrue.setForeground(new java.awt.Color(255, 255, 255));
+        countPaymentStatusTrue.setText("23");
+        countPaymentStatusTrue.setBorder(null);
+
+        jLabel20.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(203, 203, 203));
+        jLabel20.setText("Pembayaran Selesai");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -523,24 +541,29 @@ public class MainForm extends javax.swing.JFrame {
                                 .addGap(38, 38, 38))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(countMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(64, 64, 64)
+                                .addComponent(countRegistStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(91, 91, 91)
+                                .addComponent(countRegistStatusFalse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(84, 84, 84)
+                                .addComponent(countPaymentStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(countMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(64, 64, 64)
-                                        .addComponent(countRegistStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(36, 36, 36)
-                                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(37, 37, 37)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(countRegistStatusFalse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(26, 26, 26))))
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(74, 74, 74)
@@ -619,6 +642,27 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(20, 20, 20)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(countRegistStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(countMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel17)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(countRegistStatusFalse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(countPaymentStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel18)
+                                    .addComponent(jLabel20))))
+                        .addGap(60, 60, 60))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -626,24 +670,7 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(ResetButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel12)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(countRegistStatusFalse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel18))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(countRegistStatusTrue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(countMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jLabel17))))
-                        .addGap(60, 60, 60))))
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(140, 140, 140)
@@ -677,7 +704,7 @@ public class MainForm extends javax.swing.JFrame {
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
         // TODO add your handling code here:
         // Update pembayaran
-        Connection conn = Helpers.Connect.getConnection();
+        Connection conn = Helpers.DB.getConnection();
         try {
             PreparedStatement stmt = conn.prepareStatement("UPDATE mahasiswa SET status_pembayaran = ? WHERE nim = ?");
             stmt.setBoolean(1, 
@@ -686,9 +713,9 @@ public class MainForm extends javax.swing.JFrame {
             stmt.setString(2, updatePaymentNIM.getText());
             stmt.executeUpdate();
             // Success
-            Helpers.RenderAllRecord.show(mainTable);
-            Helpers.RenderAllRecord.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse);
-            ShowDialog.createDialog("Update Payment Status for NIM " + updatePaymentNIM.getText() + " Success", this);
+            Helpers.RenderData.show(mainTable);
+            Helpers.RenderData.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse, countPaymentStatusTrue);
+            Dialog.createDialog("Update Payment Status for NIM " + updatePaymentNIM.getText() + " Success", this);
         } catch (SQLException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -696,7 +723,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
         // TODO add your handling code here:
-        Connection conn = Connect.getConnection();
+        Connection conn = DB.getConnection();
         try {
             PreparedStatement stmt = conn.prepareStatement("insert into mahasiswa(nim, nama, program_studi, status_pembayaran) values(?,?,?,?)");
             stmt.setString(1, fieldNIM.getText());
@@ -708,9 +735,9 @@ public class MainForm extends javax.swing.JFrame {
             // Querying
             stmt.executeUpdate();
             // Show all records
-            Helpers.RenderAllRecord.show(mainTable);
-            ShowDialog.createDialog("Insert Data Success", this);
-            Helpers.RenderAllRecord.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse);
+            Helpers.RenderData.show(mainTable);
+            Dialog.createDialog("Insert Data Success", this);
+            Helpers.RenderData.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse, countPaymentStatusTrue);
             this.clearFormSubmit();
         } catch (SQLException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -789,9 +816,13 @@ public class MainForm extends javax.swing.JFrame {
 
     private void RefreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonActionPerformed
         // TODO add your handling code here:
-        Helpers.RenderAllRecord.show(mainTable);
-        Helpers.RenderAllRecord.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse);
+        Helpers.RenderData.show(mainTable);
+        Helpers.RenderData.createStatsMahsiswa(countMahasiswa, countRegistStatusTrue, countRegistStatusFalse, countPaymentStatusTrue);
     }//GEN-LAST:event_RefreshButtonActionPerformed
+
+    private void countRegistStatusFalseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countRegistStatusFalseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_countRegistStatusFalseActionPerformed
 
     private void clearFormSubmit () {
         fieldName.setText("Nama");
@@ -842,6 +873,7 @@ public class MainForm extends javax.swing.JFrame {
     private java.awt.Button ResetButton;
     private javax.swing.JButton SubmitButton;
     private javax.swing.JTextField countMahasiswa;
+    private javax.swing.JTextField countPaymentStatusTrue;
     private javax.swing.JTextField countRegistStatusFalse;
     private javax.swing.JTextField countRegistStatusTrue;
     private javax.swing.JTextField fieldNIM;
@@ -858,6 +890,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
