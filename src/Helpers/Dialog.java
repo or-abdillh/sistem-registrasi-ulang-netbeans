@@ -18,8 +18,6 @@ public class Dialog {
     }
     
     public static int createConfirm(String message, JFrame frame) {
-        int input = JOptionPane.showConfirmDialog(frame, message);
-        
-        return input;
+        return JOptionPane.showConfirmDialog(frame, message);
     }
 }

@@ -5,12 +5,16 @@
  */
 package Panel.UserPanel;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -308,6 +312,10 @@ public class MainForm extends javax.swing.JFrame {
                 Helpers.Dialog.createDialog("Registration Successfull, Thanks", this);
                 // Render report
                 int renderReport = Helpers.Dialog.createConfirm("Print registration card now ?", this);
+                System.out.println(renderReport);
+                if ( renderReport == 0 ) {
+                    new Helpers.RenderReport();
+                }
             }         
         } catch( SQLException ex ) {
             Helpers.Dialog.createDialog("Error : \n " + ex.getMessage(), this);

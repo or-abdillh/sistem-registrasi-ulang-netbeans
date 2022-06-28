@@ -706,11 +706,12 @@ public class MainForm extends javax.swing.JFrame {
         // Update pembayaran
         Connection conn = Helpers.DB.getConnection();
         try {
-            PreparedStatement stmt = conn.prepareStatement("UPDATE mahasiswa SET status_pembayaran = ? WHERE nim = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE mahasiswa SET status_pembayaran = ?, semester_register = ? WHERE nim = ?");
             stmt.setBoolean(1, 
                     updatePaymentStatusOption.getSelectedItem().toString().equals("Sudah Lunas") ? true : false
             );
-            stmt.setString(2, updatePaymentNIM.getText());
+            stmt.setString(2, "null");
+            stmt.setString(3, updatePaymentNIM.getText());
             stmt.executeUpdate();
             // Success
             Helpers.RenderData.show(mainTable);

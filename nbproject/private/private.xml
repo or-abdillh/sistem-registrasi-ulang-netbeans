@@ -5,10 +5,12 @@
         <group>
             <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Panel/Main.java</file>
             <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Panel/UserPanel/MainForm.java</file>
+            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/RenderData.java</file>
             <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Panel/Home/MainForm.java</file>
-            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/RenderPDF.java</file>
+            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/Dialog.java</file>
             <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Panel/AdminPanel/MainForm.java</file>
-            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/RenderAllRecord.java</file>
+            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/RenderReport.java</file>
+            <file>file:/C:/Users/USER/Documents/NetBeansProjects/sistem-registrasi-ulang-netbeans/src/Helpers/ConvertArgument.java</file>
         </group>
     </open-files>
 </project-private>

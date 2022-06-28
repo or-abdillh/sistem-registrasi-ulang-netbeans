@@ -20,7 +20,7 @@ public class ConvertArgument {
     }
             
      public static String nullSample (String source, String firstArg) {
-         if ( source == null ) {
+         if ( source == null || source.equals("null") ) {
              return firstArg;
          } else {
             return source;
