@@ -9,6 +9,7 @@ import Helpers.DB;
 import Helpers.Dialog;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.print.PrinterException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,6 +45,7 @@ public class MainForm extends javax.swing.JFrame {
         ConfirmButton.setOpaque(true);
         HomeButton.setOpaque(true);
         RefreshButton.setOpaque(true);
+        PrintButton.setOpaque(true);
     }
 
     /**
@@ -99,6 +101,7 @@ public class MainForm extends javax.swing.JFrame {
         RefreshButton = new javax.swing.JButton();
         countPaymentStatusTrue = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
+        PrintButton = new javax.swing.JButton();
 
         jLabel15.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(203, 203, 203));
@@ -480,6 +483,17 @@ public class MainForm extends javax.swing.JFrame {
         jLabel20.setForeground(new java.awt.Color(203, 203, 203));
         jLabel20.setText("Pembayaran Selesai");
 
+        PrintButton.setBackground(new java.awt.Color(0, 204, 51));
+        PrintButton.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        PrintButton.setForeground(new java.awt.Color(255, 255, 255));
+        PrintButton.setText("Print");
+        PrintButton.setBorder(null);
+        PrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -534,7 +548,9 @@ public class MainForm extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PrintButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(HomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(RefreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -597,8 +613,11 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(HomeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                            .addComponent(RefreshButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(RefreshButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                                .addComponent(HomeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                                .addComponent(PrintButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)))))
+                .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -825,6 +844,15 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_countRegistStatusFalseActionPerformed
 
+    private void PrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            mainTable.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_PrintButtonActionPerformed
+
     private void clearFormSubmit () {
         fieldName.setText("Nama");
         fieldNIM.setText("NIM");
@@ -869,6 +897,7 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ConfirmButton;
     private javax.swing.JButton HomeButton;
+    private javax.swing.JButton PrintButton;
     private javax.swing.JButton RefreshButton;
     private javax.swing.JButton RefreshButton1;
     private java.awt.Button ResetButton;
